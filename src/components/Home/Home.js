@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import Swal from "sweetalert2";
 import Players from "../Players/Players";
 import "./Home.css";
 const Home = () => {
   const [players, setPlayers] = useState([]);
   const [search, setSearch] = useState("");
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     fetch(
@@ -12,7 +15,14 @@ const Home = () => {
       .then((res) => res.json())
       .then((data) => setPlayers(data?.player));
   }, [search]);
-  console.log(players);
+
+  console.log(cart);
+  const handleDelet = (id) => {
+    const leftPlayer = cart.filter((p) => p.id !== id);
+    setCart(leftPlayer);
+    toast("Wow Deleted From Cart");
+    Swal.fire("Good job!", "You clicked the button!", "success");
+  };
 
   return (
     <div className="home-container">
@@ -24,12 +34,22 @@ const Home = () => {
         />
         <button className="search-btn">Search</button>
         <div className="players-container">
-          <Players></Players>
+          <Players players={players} cart={cart} setCart={setCart}></Players>
         </div>
       </div>
       <div className="right-side">
         <div className="cart">
-          <p>This is player Cart</p>
+          <p>This is players Cart</p>
+
+          {cart?.map((p, index) => (
+            <div className="cart-info-container" key={index}>
+              <li>{p.name}</li>
+              <button onClick={() => handleDelet(p.id)} className="delet-btn">
+                X
+              </button>
+              <ToastContainer></ToastContainer>
+            </div>
+          ))}
         </div>
       </div>
     </div>
