@@ -8,7 +8,7 @@ const Player = ({ player, cart, setCart }) => {
       name,
       id,
       strCutout,
-      Price: 115,
+      price: 115,
     };
     if (cart) {
       setCart([...cart, info]);
@@ -24,7 +24,7 @@ const Player = ({ player, cart, setCart }) => {
       name,
       id,
       strCutout,
-      Price: 115,
+      price: 115,
       bookmark: "true",
     };
 
@@ -33,8 +33,10 @@ const Player = ({ player, cart, setCart }) => {
     if (oldBookmark) {
       const isExist = oldBookmark.find((p) => p.id === id);
       if (isExist) {
-        alert("Alrady bookmarked");
-        return;
+        const updatedPrice = parseFloat(isExist.price);
+        const newUpdatedPrice = updatedPrice + 1;
+        isExist.price = newUpdatedPrice;
+        localStorage.setItem("bookmark", JSON.stringify(oldBookmark));
       } else {
         localStorage.setItem(
           "bookmark",
